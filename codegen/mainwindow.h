@@ -27,9 +27,11 @@ public:
 private slots:
     void on_btnEnd_clicked();
     void on_btnGen_clicked();
+    void on_btnPreview_clicked();
 
 private:
     Ui::MainWindow *ui;
+    bool validation(void);
 
 };
 #endif // MAINWINDOW_H
