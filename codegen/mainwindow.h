@@ -1,10 +1,12 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <cmath>
 #include <QMainWindow>
 #include <QDoubleSpinBox>
 #include <QFile>
 #include <QFileDialog>
+#include <QTextStream>
 #include <QMessageBox>
 
 QT_BEGIN_NAMESPACE
@@ -31,7 +33,8 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    bool validation(void);
+    bool validation(double pipeL, double holeD, double holeI, double merginHead, double merginEnd);
+    uint16_t calcHolenumber(double pipeL, double holeI, double merginHead, double merginEnd);
 
 };
 #endif // MAINWINDOW_H

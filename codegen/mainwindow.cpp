@@ -20,19 +20,25 @@ void MainWindow::on_btnPreview_clicked() {
 }
 
 void MainWindow::on_btnGen_clicked() {
-    if (!validation()) {
-        QMessageBox::warning(this, tr("Error"), tr("Invaild value."));
-        return;
-    }
-    QMessageBox::information(this, tr("OK"), tr("Vaild value!"));
     return;
 }
 
-bool MainWindow::validation(void) {
+bool MainWindow::validation(double pipeL, double holeD, double holeI, double merginHead, double merginEnd) {
     bool result;
-    double holeD = ui->spinHoleD->value();
-    if (ui->spinPipeL->value() >= holeD && holeD > 0.0 && ui->spinHoleI->value() > 0.0 && ui->spinMHead->value() >= 0.0 && ui->spinMEnd->value() >= 0.0 )
+    if (pipeL >= holeD &&
+        holeD > 0.0 &&
+        holeI >= 0.0 &&
+        merginHead >= 0.0 &&
+        merginEnd >= 0.0 &&
+        (pipeL - merginHead - merginEnd) >= 0.0 )
         result = true;
     else result = false;
     return result;
+}
+
+uint16_t MainWindow::calcHolenumber(double pipeL, double holeI, double merginHead, double merginEnd) {
+    uint16_t numHole = 0;
+    if (holeI != 0.0) numHole = std::floor(float(pipeL - merginHead - merginEnd / holeI));
+    else numHole = 1;
+    return numHole;
 }
