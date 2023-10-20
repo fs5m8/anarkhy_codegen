@@ -20,7 +20,37 @@ void MainWindow::on_btnPreview_clicked() {
 }
 
 void MainWindow::on_btnGen_clicked() {
+    makeFile();
     return;
+}
+
+void MainWindow::makeFile(void) {
+    double pipeL = ui->spinPipeL->value();
+    double holeD = ui->spinHoleD->value();
+    double holeI = ui->spinHoleI->value();
+    double merginHead = ui->spinMHead->value();
+    double merginEnd = ui->spinMEnd->value();
+    if (!validation(pipeL, holeD, holeI, merginHead, merginEnd)) {
+        QMessageBox::warning(this, tr("Error"), tr("Invaild value."));
+        return;
+    }
+
+    QString filename = QFileDialog::getSaveFileName(this, tr("Save Instruction File"), "", tr("Text file (*.txt)"));
+    if (filename.isEmpty()) {
+        QMessageBox::warning(this, tr("Error"), tr("Invaild file name."));
+        return;
+    }
+    QMessageBox::information(this, tr("OK"), tr("Vaild file name!"));
+    QString strFiledata = makeData(pipeL, holeD, holeI, merginHead, merginEnd);
+    QFile fileinst(filename);
+    if (!fileinst.open(QIODevice::WriteOnly)) {
+        QMessageBox::warning(this, tr("Unable to open file"), fileinst.errorString());
+        return;
+    }
+    QTextStream filestream(&fileinst);
+    filestream << strFiledata;
+    fileinst.close();
+    QMessageBox::information(this, tr("OK"), tr("Done!"));
 }
 
 bool MainWindow::validation(double pipeL, double holeD, double holeI, double merginHead, double merginEnd) {

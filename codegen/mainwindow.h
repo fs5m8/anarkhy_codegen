@@ -33,6 +33,8 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+    void makeFile(void);
+    QString makeData(double pipeL, double holeD, double holeI, double merginHead, double merginEnd);
     bool validation(double pipeL, double holeD, double holeI, double merginHead, double merginEnd);
     uint16_t calcHolenumber(double pipeL, double holeI, double merginHead, double merginEnd);
 
