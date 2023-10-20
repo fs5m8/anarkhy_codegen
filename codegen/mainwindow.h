@@ -33,10 +33,26 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+
+    struct DataSrc {
+        double pipeL;
+        double holeD;
+        double holeI;
+        double merginHead;
+        double merginEnd;
+    };
+
+    struct Mfunc {
+        QString FEED = "F";
+        QString DRILL = "D";
+        QString CUT = "C";
+        QString EOL = ";";
+    };
+
     void makeFile(void);
-    QString makeData(double pipeL, double holeD, double holeI, double merginHead, double merginEnd);
-    bool validation(double pipeL, double holeD, double holeI, double merginHead, double merginEnd);
-    uint16_t calcHolenumber(double pipeL, double holeI, double merginHead, double merginEnd);
+    QString makeData(DataSrc dataSrc);
+    bool validation(DataSrc dataSrc);
+    uint16_t calcHoleNumber(DataSrc dataSrc);
 
 };
 #endif // MAINWINDOW_H
