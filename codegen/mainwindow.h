@@ -8,6 +8,14 @@
 #include <QFileDialog>
 #include <QTextStream>
 #include <QMessageBox>
+#include <nlohmann/json.hpp>
+
+#define FEED "feed"
+#define DRILL "drill"
+#define CUT "cut"
+#define END "end"
+#define INSTRUCTION "inst"
+#define VALUE "value"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -40,13 +48,6 @@ private:
         double holeI;
         double merginHead;
         double merginEnd;
-    };
-
-    struct Mfunc {
-        QString FEED = "F";
-        QString DRILL = "D";
-        QString CUT = "C";
-        QString EOL = ";";
     };
 
     void makeFile(void);

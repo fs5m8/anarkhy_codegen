@@ -1,6 +1,8 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
 
+using json = nlohmann::json;
+
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
 }
@@ -54,22 +56,38 @@ void MainWindow::makeFile(void) {
 }
 
 QString MainWindow::makeData(DataSrc dataSrc) {
-    Mfunc func;
-    QString data = "";
+    QString q_data;
+    json j_data;
+    int pivot = 0;
     uint16_t numHole = calcHoleNumber(dataSrc);
     double surplus = dataSrc.pipeL - ((numHole * dataSrc.holeI) + dataSrc.merginHead + dataSrc.merginEnd);
-    data += func.FEED + QString::number(dataSrc.merginHead) + func.EOL;
+    j_data[std::to_string(pivot)][INSTRUCTION] = FEED;
+    j_data[std::to_string(pivot)][VALUE] = dataSrc.merginHead;
+    pivot++;
     for (int i = 0; i < numHole; i++){
-        data += func.DRILL + func.EOL;
-        data += func.FEED + QString::number(dataSrc.holeI) + func.EOL;
+        j_data[std::to_string(pivot)][INSTRUCTION] = DRILL;
+        pivot++;
+        j_data[std::to_string(pivot)][INSTRUCTION] = FEED;
+        j_data[std::to_string(pivot)][VALUE] = dataSrc.holeI;
+        pivot++;
     }
-    data += func.DRILL + func.EOL;
-    data += func.FEED + QString::number(dataSrc.merginEnd) + func.EOL;
-    if (surplus > 0) data += func.FEED + QString::number(surplus) + func.EOL;
-    data += func.CUT + func.EOL;
+    j_data[std::to_string(pivot)][INSTRUCTION] = DRILL;
+    pivot++;
+    j_data[std::to_string(pivot)][INSTRUCTION] = FEED;
+    j_data[std::to_string(pivot)][VALUE] = dataSrc.merginEnd;
+    pivot++;
+    if (surplus > 0) {
+        j_data[std::to_string(pivot)][INSTRUCTION] = FEED;
+        j_data[std::to_string(pivot)][VALUE] = surplus;
+        pivot++;
+    }
+    j_data[std::to_string(pivot)][INSTRUCTION] = CUT;
+    pivot++;
+    j_data[std::to_string(pivot)][INSTRUCTION] = END;
+    q_data = QString::fromStdString(j_data.dump());
     QMessageBox::information(this, QString::number(numHole), QString::number(surplus));
-    QMessageBox::information(this, tr("data"), data.toUtf8());
-    return data;
+    QMessageBox::information(this, tr("data"), q_data);
+    return q_data;
 }
 
 bool MainWindow::validation(DataSrc dataSrc) {
