@@ -37,12 +37,12 @@ void MainWindow::makeFile(void) {
         QMessageBox::warning(this, tr("Error"), tr("Invaild value."));
         return;
     }
-    QString filename = QFileDialog::getSaveFileName(this, tr("Save Instruction File"), "", tr("Text file (*.txt)"));
+    QString filename = QFileDialog::getSaveFileName(this, tr("Save Instruction File"), "", tr("JSON file (*.json)"));
     if (filename.isEmpty()) {
         QMessageBox::warning(this, tr("Error"), tr("Invaild file name."));
         return;
     }
-    QMessageBox::information(this, tr("OK"), tr("Vaild file name!"));
+    // QMessageBox::information(this, tr("OK"), tr("Vaild file name!"));
     QString strFiledata = makeData(dataSrc);
     QFile fileinst(filename);
     if (!fileinst.open(QIODevice::WriteOnly)) {
